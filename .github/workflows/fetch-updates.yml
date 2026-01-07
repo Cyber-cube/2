@@ -4,13 +4,12 @@ on:
 
 permissions:
   contents: write
-  id-token: read
+  id-token: write
   pages: write
 
 jobs:
   main_job:
     runs_on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
