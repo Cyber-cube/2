@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   main_job:
+    name: Main Job
     runs_on: ubuntu-latest
     steps:
       - name: Checkout code
