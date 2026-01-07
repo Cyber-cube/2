@@ -31,7 +31,7 @@ jobs:
       - name: Remove data.json of cloned repo
         run: rm ./1/src/data.json
       - name: Move files and folders outside of the folder
-        run: cd 1 && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \;
+        run: cd 1 && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \; && find . -maxdepth 1 -mindepth 1 -name ".*" -exec mv {} .. \;
       - name: Make data.json file not hidden and remove cloned repo
         run: rmdir 1 && mv .data.json data.json && mv data.json src/data.json
       - name: Install npm packages
