@@ -15,8 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
-          persist-credentials: true
+          token: ${{ secrets.WORKFLOW_SECRET }}
 
       - name: Make hidden files normal
         run: find . -maxdepth 1 -name ".*" -type f -exec sh -c 'mv "$1" "${1##*.}"' _ {} \;
@@ -49,3 +48,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Updated forked repo to match changes of original"
+        
