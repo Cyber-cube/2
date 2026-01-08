@@ -3,44 +3,48 @@ on:
   workflow_dispatch:
 
 permissions:
-  content: write
-  id-token: read
+  contents: write
+  id-token: write
   pages: write
 
 jobs:
   main_job:
-    runs_on: ubuntu-latest
-
+    name: Main Job
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
-          persist-credentials: true
+          token: ${{ secrets.WORKFLOW_SECRET }}
 
       - name: Make hidden files normal
-        run: find . -maxdepth 1 -name ".*" -type f -exec sh -c 'mv "$1" "${1#.}"' _ {} \;
+        run: find . -maxdepth 1 -name ".*" -type f -exec sh -c 'mv "$1" "${1##*.}"' _ {} \;
       - name: Make hidden directories normal
-        run: find . -mindepth 1 -maxdepth 1 -name ".*" -type d -exec sh -c 'mv "$1" "${1#.}"' _ {} \;
+        run: find . -mindepth 1 -maxdepth 1 -name ".*" -type d ! -name ".git" -exec sh -c 'mv "$1" "${1##*.}"' _ {} \; && ls -a
       - name: Make data json hidden in home
         run: mv ./src/data.json . && mv data.json .data.json
       - name: Remove all files
         run: rm -rf *
       - name: Fork original repo
         run: git clone https://github.com/Cyber-cube/1.git
-      - name: Remove data.json of cloned repo
-        run: rm 1/data.json
+      - name: Remove data.json and .git of cloned repo
+        run: rm ./1/src/data.json && rm -r ./1/.git
       - name: Move files and folders outside of the folder
-        run: cd 1 && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \;
+        run: cd 1 && ls -a && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \; && ls -a && find . -maxdepth 1 -mindepth 1 -name ".*" -exec mv {} .. \; && ls -a
       - name: Make data.json file not hidden and remove cloned repo
-        run: rmdir 1 && mv .data.json data.json
+        run: rmdir 1 && mv .data.json data.json && mv data.json src/data.json
+      - name: set username and email for gh pages
+        run: git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Install npm packages
         run: npm install
+      - name: Create dist directory by building the react app
+        run: npm run build
       - name: Deploy to GitHub Pages
-        run: npm run deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
       - name: Amend, commit and push changes
-        run: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Updated forked repo to match changes of original"
