@@ -21,7 +21,7 @@ jobs:
       - name: Make hidden files normal
         run: find . -maxdepth 1 -name ".*" -type f -exec sh -c 'mv "$1" "${1##*.}"' _ {} \;
       - name: Make hidden directories normal
-        run: find . -mindepth 1 -maxdepth 1 -name ".*" -type d -exec sh -c 'mv "$1" "${1##*.}"' _ {} \; && ls -a
+        run: find . -mindepth 1 -maxdepth 1 -name ".*" -type d ! -name ".git" -exec sh -c 'mv "$1" "${1##*.}"' _ {} \; && ls -a
       - name: Make data json hidden in home
         run: mv ./src/data.json . && mv data.json .data.json
       - name: Remove all files
