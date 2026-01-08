@@ -34,6 +34,8 @@ jobs:
         run: cd 1 && ls -a && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \; && ls -a && find . -maxdepth 1 -mindepth 1 -name ".*" -exec mv {} .. \; && ls -a
       - name: Make data.json file not hidden and remove cloned repo
         run: rmdir 1 && mv .data.json data.json && mv data.json src/data.json
+      - name: set username and email for gh pages
+        run: git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Install npm packages
         run: npm install
       - name: Deploy to GitHub Pages
