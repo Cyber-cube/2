@@ -38,10 +38,13 @@ jobs:
         run: git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Install npm packages
         run: npm install
+      - name: Create dist directory by building the react app
+        run: npm run build
       - name: Deploy to GitHub Pages
-        run: npm run deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
       - name: Amend, commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
