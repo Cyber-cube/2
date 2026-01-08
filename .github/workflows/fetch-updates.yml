@@ -22,7 +22,7 @@ jobs:
       - name: Make hidden directories normal
         run: find . -mindepth 1 -maxdepth 1 -name ".*" -type d ! -name ".git" -exec sh -c 'mv "$1" "${1##*.}"' _ {} \; && ls -a
       - name: Make necessary files hidden in home
-        run: mv ./src/data.json . && mv data.json .data.json && mv package.js .package.json && mv vite.config.js .vite.config.js
+        run: mv ./src/data.json . && mv data.json .data.json && mv package.json .package.json && mv vite.config.js .vite.config.js
       - name: Remove all files
         run: rm -rf *
       - name: Fork original repo
