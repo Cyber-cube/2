@@ -29,7 +29,7 @@ jobs:
       - name: Fork original repo
         run: git clone https://github.com/Cyber-cube/1.git
       - name: Remove data.json and .git of cloned repo
-        run: rm ./1/src/data.json && rm ./1/.git
+        run: rm ./1/src/data.json && rm -r ./1/.git
       - name: Move files and folders outside of the folder
         run: cd 1 && ls -a && find . -maxdepth 1 -mindepth 1 -exec mv {} .. \; && ls -a && find . -maxdepth 1 -mindepth 1 -name ".*" -exec mv {} .. \; && ls -a
       - name: Make data.json file not hidden and remove cloned repo
