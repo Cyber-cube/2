@@ -4,7 +4,7 @@ permissions:
   contents: write
   id-token: write
   pages: write
-  
+
 on:
   workflow_dispatch:
 
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WORKFLOW_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: npm install
